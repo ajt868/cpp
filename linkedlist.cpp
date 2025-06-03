@@ -13,15 +13,81 @@ struct ListNode {
 };
 
 
+void printList(ListNode *head) {
 
-ListNode* createList(int n) {
-    if (n <= 0) {
-        cout << "Error: Cannot create a list of size " << n << endl;
-        return NULL; 
+    printf("The list printed is: ");
+
+    if (head == NULL) {
+        printf("Empty List.\n");
+        return;
     }
 
+    else if (head->next == NULL) {
+        printf("[%d]\n", head->val);
+        return;
+    }
 
+    printf("[");
+    while (head->next != NULL) {
+        printf("%d, ", head->val);
+        head = head->next;
+    }
 
+    if (head->next == NULL) {
+        printf("%d]\n", head->val);
+    }
+}
+
+/**
+ * Function to create a linked list.
+ */
+ListNode* createList(int n) {
+
+    if (n <= 0) {
+        do {
+            cout << "Re-enter the size of the list (must be greater than 0): ";
+            cin >> n;
+
+            if (n <= 0) {
+                cout << "Error: Choose a size greater than 0." << endl;
+            }
+        } while (n <= 0);
+    }
+    
+
+    // Let users enter values they want to put in list.
+    int *arr = new int[n];
+
+    switch (n)
+    {
+    case 1:
+        printf("Enter the %d value you want to enter into the list. \n", n);
+        /* code */
+        break;
+    
+    default:
+        printf("Enter the %d values you want to enter into the list. \n", n);
+        break;
+    }
+    
+
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+    
+    struct ListNode *head = new ListNode(arr[0]);
+
+    ListNode *current = head;
+
+    for (int i = 1; i < n; i++) {
+        current->next = new ListNode(arr[i]);
+        current = current->next;
+    }
+
+    // clean up array memory
+    delete [] arr;
+
+    return head;
 
 }
 
@@ -35,12 +101,12 @@ ListNode* reverseList(ListNode* head) {
     struct ListNode* prev = NULL;
 
     while (current != NULL) {
-        struct ListNode* next = current->next; // 2
+        struct ListNode* next = current->next;
 
         // Swapping logic
-        current->next = prev; // null
-        prev = current;       // prev = 1
-        current = next;       // 2
+        current->next = prev;
+        prev = current;
+        current = next; 
 
     }
 
@@ -49,8 +115,10 @@ ListNode* reverseList(ListNode* head) {
 
 int main() {
     
-    int x = 5;
-    string str = to_string(x);
-
-    cout << str << endl;
+    int num;
+    printf("Enter the length of your desired list: \n");
+    cin >> num;
+    struct ListNode *head = createList(num);
+    
+    printList(head);
 }
