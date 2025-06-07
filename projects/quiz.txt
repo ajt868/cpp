@@ -1,0 +1,143 @@
+Awesome choice! A **Quiz App** is a great beginner-to-intermediate project that helps you learn:
+
+* File I/O (reading quiz questions)
+* Data structures (storing questions/answers)
+* Control flow (score tracking, question flow)
+* Optionally: timing and randomization
+
+---
+
+## 🧩 Step-by-Step Plan for Your Quiz App
+
+We’ll make a **console-based quiz app** first. Here's what it will do:
+
+1. Read quiz questions from a file
+2. Ask the user each question with multiple-choice options
+3. Accept the user's answer
+4. Track and display the score at the end
+
+---
+
+## 📁 Step 1: Create Your Project Files
+
+```
+quiz-app/
+├── main.cpp
+└── questions.txt
+```
+
+---
+
+## 📝 `questions.txt` — Sample Question Format
+
+We'll use a simple format like:
+
+```
+What is the capital of France?
+a) Berlin
+b) Madrid
+c) Paris
+d) Rome
+c
+
+What is 2 + 2?
+a) 3
+b) 4
+c) 5
+d) 22
+b
+```
+
+Each question is 6 lines:
+
+1. Question
+   2–5. Options (a, b, c, d)
+2. Correct option letter (`a`, `b`, `c`, or `d`)
+
+---
+
+## 🧠 Step 2: Write the Core Logic (`main.cpp`)
+
+```cpp
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+
+struct Question {
+    std::string text;
+    std::string options[4];
+    char correct;
+};
+
+std::vector<Question> loadQuestions(const std::string& filename) {
+    std::vector<Question> questions;
+    std::ifstream file(filename);
+    if (!file) {
+        std::cerr << "Could not open file: " << filename << std::endl;
+        return questions;
+    }
+
+    std::string line;
+    while (std::getline(file, line)) {
+        Question q;
+        q.text = line;
+        for (int i = 0; i < 4; ++i) {
+            std::getline(file, q.options[i]);
+        }
+        file >> q.correct;
+        file.ignore(); // to skip newline after the answer
+        questions.push_back(q);
+    }
+
+    return questions;
+}
+
+int main() {
+    std::vector<Question> quiz = loadQuestions("questions.txt");
+
+    int score = 0;
+    for (const auto& q : quiz) {
+        std::cout << "\n" << q.text << "\n";
+        for (const auto& opt : q.options) {
+            std::cout << opt << "\n";
+        }
+
+        std::cout << "Your answer: ";
+        char ans;
+        std::cin >> ans;
+
+        if (tolower(ans) == tolower(q.correct)) {
+            std::cout << "Correct!\n";
+            ++score;
+        } else {
+            std::cout << "Wrong! Correct answer was: " << q.correct << "\n";
+        }
+    }
+
+    std::cout << "\nYou scored " << score << " out of " << quiz.size() << "!\n";
+    return 0;
+}
+```
+
+---
+
+## 🧪 Step 3: Compile and Run
+
+```bash
+g++ main.cpp -o quiz
+./quiz
+```
+
+---
+
+## 🚀 Optional Features You Can Add Later
+
+* Timer (using `<chrono>`)
+* Randomize questions
+* High scores saved to a file
+* Categories or difficulty levels
+
+---
+
+Would you like me to help you add **timing**, **categories**, or turn it into a **GUI with Qt** next?
